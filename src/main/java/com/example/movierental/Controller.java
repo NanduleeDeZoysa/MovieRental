@@ -1,16 +1,22 @@
 package com.example.movierental;
 
 import com.example.movierental.model.User;
+import com.example.movierental.model.Movie;
 import com.example.movierental.services.UserServices;
+import com.example.movierental.services.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
 @org.springframework.stereotype.Controller
 public class Controller {
 
     @Autowired
     UserServices userServices;
+
+    @Autowired
+    private MovieService movieService;
 
     @GetMapping("/")
     public String index(Model model) {
@@ -50,10 +56,12 @@ public class Controller {
     }
 
     @PostMapping("/login")
-    public String login(Model model, @RequestParam String name, @RequestParam String password){
-        if(userServices.LoginUser(name, password))
-            return "profile";
-        else {
+    public String login(Model model, @RequestParam String name, @RequestParam String password) {
+        if (userServices.LoginUser(name, password)) {
+            System.out.println("Loaded login after");
+            model.addAttribute("movies", movieService.getAllMovies("title"));
+            return "movieList";  // ✅ matches movieList.html
+        } else {
             model.addAttribute("message3", "Invalid username or password");
             return "login";
         }

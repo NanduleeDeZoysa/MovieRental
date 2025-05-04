@@ -5,8 +5,15 @@
     <title>Profile</title>
 </head>
 <body>
-
-<h1> Login Success </h1>
+<form method="get" action="/movies">
+    <a class="btn btn-primary mb-3" href="/movies">Add Movie</a>
+    <label>Sort by:</label>
+    <select name="sortBy">
+        <option value="title">Title</option>
+        <option value="price">Price</option>
+    </select>
+    <input type="submit" value="Sort">
+</form>
 
 </body>
 </html>
