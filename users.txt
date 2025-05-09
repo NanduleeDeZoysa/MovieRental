@@ -1,3 +1,2 @@
-Nandulee:abc@gmail.com:123
-Kasun:123@gmail.com:345
-qqq:abc@gmail.com:123
+User01:user01@gmail.com:0712345677:1234
+Nandulee:abc@gmail.com:071234567:123
