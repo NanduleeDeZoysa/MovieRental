@@ -2,23 +2,18 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Recently Watched Movies</title>
+    <title>Recently Rented Movies</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script>
-        async function watchMovie() {
-            const title = document.getElementById("movieTitle").value;
-            if (!title.trim()) {
-                alert("Please enter a movie title.");
-                return;
-            }
+        const movieTitle = "Sample Movie Title"; // Replace or fetch from elsewhere
 
-            const response = await fetch(`/api/watch?title=${encodeURIComponent(title)}`, {
+        async function rentMovie() {
+            const response = await fetch(`/api/watch?title=${encodeURIComponent(movieTitle)}`, {
                 method: 'POST'
             });
 
             const result = await response.text();
             alert(result);
-            document.getElementById("movieTitle").value = "";
             loadWatchlist();
         }
 
@@ -29,14 +24,26 @@
             list.innerHTML = "";
 
             if (movies.length === 0) {
-                list.innerHTML = "<p class='text-muted'>No movies watched yet.</p>";
+                list.innerHTML = "<p class='text-muted'>No movies rented yet.</p>";
                 return;
             }
 
-            movies.forEach(movie => {
+            movies.forEach(movieTitle => {
                 const li = document.createElement("li");
-                li.className = "list-group-item";
-                li.textContent = movie;
+                li.className = "list-group-item d-flex justify-content-between align-items-center";
+
+                const titleSpan = document.createElement("span");
+                titleSpan.textContent = movieTitle;
+
+                const rateBtn = document.createElement("button");
+                rateBtn.className = "btn btn-outline-primary btn-sm";
+                rateBtn.textContent = "Rate & Review";
+                rateBtn.onclick = function () {
+                    window.location.href = `/review.html?title=${encodeURIComponent(movieTitle)}`;
+                };
+
+                li.appendChild(titleSpan);
+                li.appendChild(rateBtn);
                 list.appendChild(li);
             });
         }
@@ -48,19 +55,14 @@
 <div class="container mt-5">
     <div class="card shadow-lg">
         <div class="card-body">
-            <h2 class="card-title mb-4 text-center">Recently Watched Movies</h2>
+            <h2 class="card-title mb-4 text-center">Recently Rented Movies</h2>
 
-            <div class="mb-3">
-                <input type="text" id="movieTitle" class="form-control" placeholder="Enter a movie title">
+            <!-- ✅ Rent Button only -->
+            <div class="d-grid mb-4">
+                <button class="btn btn-success" onclick="rentMovie()">Rent Movie</button>
             </div>
 
-            <div class="d-grid">
-                <button class="btn btn-success" onclick="watchMovie()">Watch Movie</button>
-            </div>
-
-            <hr class="my-4">
-
-            <h4>Top 5 Recent Movies:</h4>
+            <h4 class="mb-3">Top 5 Recent Rentals:</h4>
             <ul class="list-group" id="watchlist"></ul>
         </div>
     </div>
