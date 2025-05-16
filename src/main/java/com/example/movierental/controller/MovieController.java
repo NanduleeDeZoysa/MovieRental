@@ -1,7 +1,7 @@
 package com.example.movierental.controller;
 
+import com.example.movierental.model.Movie;
 import com.example.movierental.model.User;
-import model.Movie;
 import util.MovieManager;
 
 import jakarta.servlet.http.HttpSession;
@@ -17,7 +17,7 @@ public class MovieController {
     @GetMapping("/movies")
     public List<Movie> getMovies() {
         MovieManager.sortMoviesByRating();
-        return MovieManager.getMovies();
+            return MovieManager.getMovies();
     }
 
     @PostMapping("/watch")

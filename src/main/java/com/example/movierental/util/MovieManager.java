@@ -1,6 +1,7 @@
 package util;
 
-import model.Movie;
+import com.example.movierental.model.Movie;
+
 import java.util.ArrayList;
 import java.util.List;
 
