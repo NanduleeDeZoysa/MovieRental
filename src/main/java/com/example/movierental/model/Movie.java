@@ -1,4 +1,4 @@
-package model;
+package com.example.movierental.model;
 
 public class Movie {
     private int id;
