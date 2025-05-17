@@ -33,10 +33,6 @@
             margin-bottom: 2rem;
             border-radius: 10px;
         }
-        .watchlist-btn.added {
-            background-color: #28a745;
-            color: white;
-        }
         .fixed-bottom-btn {
             position: fixed;
             bottom: 20px;
@@ -51,6 +47,16 @@
             color: #28a745;
             margin-bottom: 1rem;
         }
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+            margin-top: 10px;
+        }
+        .action-buttons .btn {
+            flex: 1;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.875rem;
+        }
     </style>
 </head>
 <body>
@@ -61,9 +67,8 @@
 
     <!-- Header Section -->
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1>Movie Catalog</h1>
+        <h1>Movie catalogue</h1>
         <div>
-
             <a th:href="@{/profile}" class="btn btn-outline-primary">
                 <i class="fas fa-user"></i> Profile
             </a>
@@ -81,6 +86,7 @@
     </form>
 
     <!-- Top Movies Section -->
+
     <div class="mb-5" th:unless="${#lists.isEmpty(topMovies)}">
         <h2 class="mb-4">Top Rated Movies</h2>
         <div class="row row-cols-1 row-cols-md-3 row-cols-lg-5 g-4">
@@ -97,27 +103,24 @@
                             <small class="text-muted" th:text="${movie.genre} + ' • ' + ${movie.year}">Genre • Year</small>
                         </p>
                         <div class="rating-stars mb-2">
-                            <span th:each="i : ${#numbers.sequence(1, 5)}">
-                                <i th:class="${i <= movie.rating} ? 'fas fa-star' : 'far fa-star'"></i>
-                            </span>
+                        <span th:each="i : ${#numbers.sequence(1, 5)}">
+                            <i th:class="${i <= movie.rating} ? 'fas fa-star' : 'far fa-star'"></i>
+                        </span>
                             <span th:text="' (' + ${movie.rating} + '/5)'"> (rating/5)</span>
                         </div>
-                    </div>
-                    <div class="card-footer bg-white">
-                        <form th:action="@{/movies/watch/{id}(id=${movie.id})}" method="post">
-                            <button type="submit"
-                                    class="btn btn-sm w-100"
-                                    th:class="${watchlist.contains(movie.id)} ? 'btn-success' : 'btn-outline-success'">
-                                <i class="fas" th:class="${watchlist.contains(movie.id)} ? 'fa-check' : 'fa-plus'"></i>
-                                <span th:text="${watchlist.contains(movie.id)} ? 'In Watchlist' : 'Add to Watchlist'">Add to Watchlist</span>
-                            </button>
-                        </form>
+
+                        <!-- Action Buttons -->
+                        <div class="action-buttons">
+                            <a th:href="@{/movies/view/{id}(id=${movie.id})}" class="btn btn-info btn-sm">
+                                <i class="fas fa-eye"></i> View
+                            </a>
+
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
     <!-- Recently Watched Section -->
     <div th:if="${not #lists.isEmpty(recentlyWatched)}" class="mb-5">
         <h2 class="mb-4">Recently Watched</h2>
@@ -134,16 +137,20 @@
                         <p class="card-text">
                             <small class="text-muted" th:text="${movie.genre} + ' • ' + ${movie.year}">Genre • Year</small>
                         </p>
-                    </div>
-                    <div class="card-footer bg-white">
-                        <form th:action="@{/movies/watch/{id}(id=${movie.id})}" method="post">
-                            <button type="submit"
-                                    class="btn btn-sm w-100"
-                                    th:class="${watchlist.contains(movie.id)} ? 'btn-success' : 'btn-outline-success'">
-                                <i class="fas" th:class="${watchlist.contains(movie.id)} ? 'fa-check' : 'fa-plus'"></i>
-                                <span th:text="${watchlist.contains(movie.id)} ? 'In Watchlist' : 'Add to Watchlist'">Add to Watchlist</span>
-                            </button>
-                        </form>
+
+                        <!-- Action Buttons -->
+                        <div class="action-buttons">
+                            <a th:href="@{/movies/view/{id}(id=${movie.id})}" class="btn btn-info btn-sm">
+                                <i class="fas fa-eye"></i> View
+                            </a>
+                            <form th:action="@{'/movies/watch' + (watchlist.contains(movie.id) ? '/remove/' : '/' + movie.id}" method="post">
+                                <button type="submit" class="btn btn-sm"
+                                        th:class="${watchlist.contains(movie.id)} ? 'btn-success' : 'btn-outline-success'">
+                                    <i class="fas" th:class="${watchlist.contains(movie.id)} ? 'fa-check' : 'fa-plus'"></i>
+                                    <span th:text="${watchlist.contains(movie.id)} ? 'In Watchlist' : 'Watchlist'"></span>
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -151,6 +158,7 @@
     </div>
 
     <!-- Watchlist Section -->
+    <!-- In your Watchlist Section -->
     <div th:if="${not #lists.isEmpty(watchlist)}" class="mb-5">
         <h2 class="mb-4">My Watchlist</h2>
         <div class="row row-cols-1 row-cols-md-3 row-cols-lg-5 g-4">
@@ -168,13 +176,18 @@
                                 <p class="card-text">
                                     <small class="text-muted" th:text="${movie.get().genre} + ' • ' + ${movie.get().year}">Genre • Year</small>
                                 </p>
-                            </div>
-                            <div class="card-footer bg-white">
-                                <form th:action="@{/movies/watch/remove/{id}(id=${movieId})}" method="post">
-                                    <button type="submit" class="btn btn-danger btn-sm w-100">
-                                        <i class="fas fa-trash"></i> Remove
-                                    </button>
-                                </form>
+
+                                <!-- Action Buttons -->
+                                <div class="action-buttons">
+                                    <a th:href="@{/movies/view/{id}(id=${movieId})}" class="btn btn-info btn-sm">
+                                        <i class="fas fa-eye"></i> View
+                                    </a>
+                                    <form th:action="@{/movies/watch/remove/{id}(id=${movieId})}" method="post">
+                                        <button type="submit" class="btn btn-danger btn-sm">
+                                            <i class="fas fa-trash"></i> Remove
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -184,8 +197,7 @@
     </div>
 </div>
 
-<!-- View All Movies  -->
-
+<!-- View All Movies Button -->
 <div class="fixed-bottom-btn">
     <a th:href="@{/movies/all}" class="btn btn-primary">
         <i class="fas fa-list"></i> View All Movies
