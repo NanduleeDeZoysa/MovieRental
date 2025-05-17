@@ -76,8 +76,8 @@
                 </a>
 
                 <!-- Watchlist Button -->
-                <!-- In your movieList.html, update the watchlist button section -->
-                <!-- In your movieList.html, update the watchlist button section -->
+
+
                 <form th:action="@{__${watchlist.contains(movie.id) ? '/movies/watch/remove/' + movie.id : '/movies/watch/' + movie.id}__}"
                       method="post">
                   <button type="submit" class="btn btn-sm"
