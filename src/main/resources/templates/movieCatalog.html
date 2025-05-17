@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Catalog</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .movie-card {
+            transition: transform 0.3s ease;
+            margin-bottom: 20px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        .movie-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .card-img-top {
+            height: 300px;
+            object-fit: cover;
+            width: 100%;
+        }
+        .rating-stars {
+            color: gold;
+        }
+        .catalog-header {
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            color: white;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-radius: 10px;
+        }
+        .watchlist-btn.added {
+            background-color: #28a745;
+            color: white;
+        }
+        .fixed-bottom-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        .error-message {
+            color: #dc3545;
+            margin-bottom: 1rem;
+        }
+        .success-message {
+            color: #28a745;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+<div class="container py-5">
+    <!-- Error/Success Messages -->
+    <div th:if="${error}" class="alert alert-danger error-message" th:text="${error}"></div>
+    <div th:if="${success}" class="alert alert-success success-message" th:text="${success}"></div>
+
+    <!-- Header Section -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Movie Catalog</h1>
+        <div>
+
+            <a th:href="@{/profile}" class="btn btn-outline-primary">
+                <i class="fas fa-user"></i> Profile
+            </a>
+        </div>
+    </div>
+
+    <!-- Search Form -->
+    <form th:action="@{/movies/search}" method="get" class="mb-4">
+        <div class="input-group">
+            <input type="text" name="query" class="form-control" placeholder="Search movies..." required>
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-search"></i> Search
+            </button>
+        </div>
+    </form>
+
+    <!-- Top Movies Section -->
+    <div class="mb-5" th:unless="${#lists.isEmpty(topMovies)}">
+        <h2 class="mb-4">Top Rated Movies</h2>
+        <div class="row row-cols-1 row-cols-md-3 row-cols-lg-5 g-4">
+            <div class="col" th:each="movie : ${topMovies}">
+                <div class="card h-100 movie-card">
+                    <a th:href="@{/movies/view/{id}(id=${movie.id})}">
+                        <img th:src="${movie.posterUrl ?: 'https://via.placeholder.com/300x450?text=No+Poster'}"
+                             class="card-img-top"
+                             alt="Movie poster">
+                    </a>
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${movie.title}">Movie Title</h5>
+                        <p class="card-text">
+                            <small class="text-muted" th:text="${movie.genre} + ' • ' + ${movie.year}">Genre • Year</small>
+                        </p>
+                        <div class="rating-stars mb-2">
+                            <span th:each="i : ${#numbers.sequence(1, 5)}">
+                                <i th:class="${i <= movie.rating} ? 'fas fa-star' : 'far fa-star'"></i>
+                            </span>
+                            <span th:text="' (' + ${movie.rating} + '/5)'"> (rating/5)</span>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-white">
+                        <form th:action="@{/movies/watch/{id}(id=${movie.id})}" method="post">
+                            <button type="submit"
+                                    class="btn btn-sm w-100"
+                                    th:class="${watchlist.contains(movie.id)} ? 'btn-success' : 'btn-outline-success'">
+                                <i class="fas" th:class="${watchlist.contains(movie.id)} ? 'fa-check' : 'fa-plus'"></i>
+                                <span th:text="${watchlist.contains(movie.id)} ? 'In Watchlist' : 'Add to Watchlist'">Add to Watchlist</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recently Watched Section -->
+    <div th:if="${not #lists.isEmpty(recentlyWatched)}" class="mb-5">
+        <h2 class="mb-4">Recently Watched</h2>
+        <div class="row row-cols-1 row-cols-md-3 row-cols-lg-5 g-4">
+            <div class="col" th:each="movie : ${recentlyWatched}">
+                <div class="card h-100 movie-card">
+                    <a th:href="@{/movies/view/{id}(id=${movie.id})}">
+                        <img th:src="${movie.posterUrl ?: 'https://via.placeholder.com/300x450?text=No+Poster'}"
+                             class="card-img-top"
+                             alt="Movie poster">
+                    </a>
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${movie.title}">Movie Title</h5>
+                        <p class="card-text">
+                            <small class="text-muted" th:text="${movie.genre} + ' • ' + ${movie.year}">Genre • Year</small>
+                        </p>
+                    </div>
+                    <div class="card-footer bg-white">
+                        <form th:action="@{/movies/watch/{id}(id=${movie.id})}" method="post">
+                            <button type="submit"
+                                    class="btn btn-sm w-100"
+                                    th:class="${watchlist.contains(movie.id)} ? 'btn-success' : 'btn-outline-success'">
+                                <i class="fas" th:class="${watchlist.contains(movie.id)} ? 'fa-check' : 'fa-plus'"></i>
+                                <span th:text="${watchlist.contains(movie.id)} ? 'In Watchlist' : 'Add to Watchlist'">Add to Watchlist</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Watchlist Section -->
+    <div th:if="${not #lists.isEmpty(watchlist)}" class="mb-5">
+        <h2 class="mb-4">My Watchlist</h2>
+        <div class="row row-cols-1 row-cols-md-3 row-cols-lg-5 g-4">
+            <div class="col" th:each="movieId : ${watchlist}">
+                <div class="card h-100 movie-card">
+                    <div th:with="movie=${movieService.getMovieById(movieId)}">
+                        <div th:if="${movie.present}">
+                            <a th:href="@{/movies/view/{id}(id=${movieId})}">
+                                <img th:src="${movie.get().posterUrl ?: 'https://via.placeholder.com/300x450?text=No+Poster'}"
+                                     class="card-img-top"
+                                     alt="Movie poster">
+                            </a>
+                            <div class="card-body">
+                                <h5 class="card-title" th:text="${movie.get().title}">Movie Title</h5>
+                                <p class="card-text">
+                                    <small class="text-muted" th:text="${movie.get().genre} + ' • ' + ${movie.get().year}">Genre • Year</small>
+                                </p>
+                            </div>
+                            <div class="card-footer bg-white">
+                                <form th:action="@{/movies/watch/remove/{id}(id=${movieId})}" method="post">
+                                    <button type="submit" class="btn btn-danger btn-sm w-100">
+                                        <i class="fas fa-trash"></i> Remove
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- View All Movies  -->
+
+<div class="fixed-bottom-btn">
+    <a th:href="@{/movies/all}" class="btn btn-primary">
+        <i class="fas fa-list"></i> View All Movies
+    </a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
