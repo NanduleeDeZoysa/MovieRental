@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Movie Details</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+            /* Watchlist button styles */
+        .watchlist-btn {
+            transition: all 0.3s ease;
+            border-width: 2px;
+        }
+
+        .watchlist-add {
+            background-color: #f8f9fa;
+            border-color: #28a745;
+            color: #28a745;
+        }
+
+        .watchlist-add:hover {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .watchlist-added {
+            background-color: #28a745;
+            border-color: #28a745;
+            color: white;
+        }
+
+        .watchlist-added:hover {
+            background-color: #218838;
+            border-color: #1e7e34;
+        }
+
+        /* Keep your existing styles */
+        .movie-poster {
+            max-height: 500px;
+            object-fit: contain;
+        }
+        .similar-movie-card {
+            transition: transform 0.3s ease;
+            margin-bottom: 20px;
+        }
+        .similar-movie-card:hover {
+            transform: translateY(-5px);
+        }
+        .rating-stars {
+            color: gold;
+        }
+        .back-button {
+            margin-bottom: 20px;
+        }
+
+    </style>
+</head>
+<body class="bg-light">
+<div class="container py-5">
+    <a th:href="@{/movies/catalog}" class="btn btn-primary back-button">
+        <i class="fas fa-arrow-left"></i> Back to Catalog
+    </a>
+
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            <h1 class="h4 mb-0" th:text="${movie.title}">Movie Title</h1>
+        </div>
+
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <img th:src="${movie.posterUrl ?: 'https://via.placeholder.com/300x450?text=No+Poster'}"
+                         class="img-fluid movie-poster rounded"
+                         alt="Movie poster">
+                </div>
+                <div class="col-md-8">
+                    <div class="mb-3">
+                        <h2 th:text="${movie.title}">Movie Title</h2>
+                        <p class="text-muted" th:text="${movie.genre} + ' • ' + ${movie.year}">Genre • Year</p>
+                    </div>
+
+                    <div class="mb-3 rating-stars">
+                        <span th:each="i : ${#numbers.sequence(1, 5)}">
+                            <i th:class="${i <= movie.rating} ? 'fas fa-star' : 'far fa-star'"></i>
+                        </span>
+                        <span th:text="'(' + ${movie.rating} + '/5)'"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <form th:action="@{/movies/watch/{id}(id=${movie.id})}" method="post" class="d-inline">
+                            <button type="submit" class="btn btn-lg mr-2 watchlist-btn"
+                                    th:classappend="${inWatchlist} ? 'watchlist-added' : 'watchlist-add'">
+                                <i class="fas" th:class="${inWatchlist} ? 'fa-check' : 'fa-plus'"></i>
+                                <span th:text="${inWatchlist} ? 'In Watchlist' : 'Add to Watchlist'"></span>
+                            </button>
+                        </form>
+                        <form th:action="@{/movies/rent/{id}(id=${movie.id})}" method="post" class="d-inline">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-film"></i> Rent Movie
+                            </button>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

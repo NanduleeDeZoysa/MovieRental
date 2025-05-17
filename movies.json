@@ -1,0 +1,74 @@
+[
+  {
+    "id": 1,
+    "title": "thor",
+    "genre": "action",
+    "year": 2012,
+    "rating": 5,
+    "posterUrl": "https://example.com/posters/shawshank.jpg"
+  },
+  {
+    "id": 2,
+    "title": "The Good father",
+    "genre": "Crime",
+    "year": 1972,
+    "rating": 4.5,
+    "posterUrl": "gettyimages-71715631-612x612.jpg"
+  },
+  {
+    "id": 3,
+    "title": "The ",
+    "genre": "Crime",
+    "year": 1970,
+    "rating": 3.5,
+    "posterUrl": "https://depositphotos.com/photo/many-tropical-fruits-in-outdoor-market-11602637.html"
+  },
+  {
+    "id": 4,
+    "title": "father",
+    "genre": "action",
+    "year": 1872,
+    "rating": 2.9,
+    "posterUrl": "https://www.google.com/imgres?q=godfather.jpg"
+  },
+  {
+    "id": 5,
+    "title": "Gold",
+    "genre": "Crime",
+    "year": 2025,
+    "rating": 4.9,
+    "posterUrl": "https://depositphotos.com/photos/sri-lanka.html"
+  },
+  {
+    "id": 6,
+    "title": "Bat man",
+    "genre": "action",
+    "year": 2023,
+    "rating": 3,
+    "posterUrl": "https://www.google.com/imgres?q=godfather.jpg"
+  },
+  {
+    "id": 7,
+    "title": "iron man",
+    "genre": "action",
+    "year": 2018,
+    "rating": 5,
+    "posterUrl": "https://www.google.com/imgres?q=godfather.jpg"
+  },
+  {
+    "id": 8,
+    "title": "hero",
+    "genre": "Romance",
+    "year": 2012,
+    "rating": 4,
+    "posterUrl": "https://www.google.com/imgres?q=godfather.jpg"
+  },
+  {
+    "id": 9,
+    "title": "why",
+    "genre": "horror",
+    "year": 2012,
+    "rating": 4,
+    "posterUrl": "https://www.google.com/imgres?q=godfather.jpg"
+  }
+]
