@@ -71,12 +71,9 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
-<<<<<<< HEAD
-=======
 
     public void setNumber(String number) {
         this.number = number;
     }
->>>>>>> origin/main
 }
 

@@ -1,4 +1,4 @@
-package com.example.movierental;
+package com.example.movierental.controller;
 
 import com.example.movierental.model.Movie;
 import com.example.movierental.services.MovieService;
@@ -8,14 +8,20 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 @Controller
-public class MovieController {
+public class MovieListController {
 
     @Autowired
     private MovieService movieService;
+
+    @GetMapping("/movieList")
+    public String movieList(Model model) {
+        model.addAttribute("movies", movieService.getAllMovies("title"));
+        return "movieList";  // ✅ matches movieList.html
+
+    }
 
     // === LIST MOVIES ===
     @GetMapping("/movies")
