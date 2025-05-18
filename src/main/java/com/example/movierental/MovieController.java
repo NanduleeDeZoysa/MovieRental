@@ -101,7 +101,7 @@ public class MovieController {
     }
 
     @PostMapping("/watch/{id}")
-    public String toggleWatchlist(@PathVariable Long id,
+    public String Watchlist(@PathVariable Long id,
                                   HttpSession session,
                                   RedirectAttributes redirectAttributes,
                                   @RequestHeader(required = false) String referer) {
@@ -273,7 +273,7 @@ public class MovieController {
                 return "redirect:/login";
             }
 
-            // Remove from all users' watchlists
+            // Remove  watchlists
             List<User> allUsers = userServices.readUsers();
             allUsers.forEach(u -> {
                 if (u.getWatchlist().contains(id)) {
