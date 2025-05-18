@@ -95,7 +95,7 @@ public class MovieController {
         // Add to model
         model.addAttribute("movie", movie.get());
         model.addAttribute("inWatchlist", user.getWatchlist().contains(id));
-        model.addAttribute("similarMovies", movieService.getSimilarMovies(movie.get().getGenre(), id));
+
 
         return "movieView";
     }
