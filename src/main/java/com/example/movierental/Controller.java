@@ -40,16 +40,17 @@ public class Controller {
     }
 
     @PostMapping("/registration")
-    //@ResponseBody
-    public String registration(Model model, @RequestParam String name, @RequestParam String email, @RequestParam String password, @RequestParam String repeatPassword) {
+    public String registration(Model model, @RequestParam String name, @RequestParam String email,
+                               @RequestParam String password, @RequestParam String repeatPassword) {
         if (!password.equals(repeatPassword)) {
             model.addAttribute("message2", "Passwords do not match");
-           return "registration";
-       }
+            return "registration";
+        }
+
         User u1 = new User(name, email, password);
-        if(userServices.Adduser(u1))
+        if (userServices.Adduser(u1)) {
             return "login";
-        else {
+        } else {
             model.addAttribute("message1", "User already exists");
             return "registration";
         }
@@ -58,13 +59,11 @@ public class Controller {
     @PostMapping("/login")
     public String login(Model model, @RequestParam String name, @RequestParam String password) {
         if (userServices.LoginUser(name, password)) {
-            System.out.println("Loaded login after");
-            model.addAttribute("movies", movieService.getAllMovies("title"));
-            return "movieList";  // ✅ matches movieList.html
+            model.addAttribute("movies", movieService.getAllMoviesSortedByRating(false)); // ascending by rating
+            return "movieList";
         } else {
             model.addAttribute("message3", "Invalid username or password");
             return "login";
         }
     }
-
 }

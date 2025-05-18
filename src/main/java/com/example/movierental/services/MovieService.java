@@ -17,7 +17,7 @@ public class MovieService {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     public MovieService() {
-        loadMovies();  // Load movies from file when the service is initialized
+        loadMovies();
     }
 
     private void loadMovies() {
@@ -39,11 +39,13 @@ public class MovieService {
         }
     }
 
-    public List<Movie> getAllMovies(String sortBy) {
+    // ✅ Only sorting by rating
+    public List<Movie> getAllMoviesSortedByRating(boolean descending) {
         List<Movie> sortedList = new ArrayList<>(movieList);
-
-        // Sort movies based on the sortBy parameter
-        bubbleSort(sortedList, sortBy);
+        sortedList.sort(Comparator.comparingDouble(Movie::getRating));
+        if (descending) {
+            Collections.reverse(sortedList);
+        }
         return sortedList;
     }
 
@@ -53,49 +55,18 @@ public class MovieService {
 
     public void saveMovie(Movie movie) {
         if (movie.getId() == null) {
-            // Generate new ID for the movie
             long newId = movieList.stream().mapToLong(Movie::getId).max().orElse(0) + 1;
             movie.setId(newId);
             movieList.add(movie);
         } else {
-            // Update existing movie
             deleteMovie(movie.getId());
             movieList.add(movie);
         }
-        saveMovies();  // Save updated movie list to file
+        saveMovies();
     }
 
     public void deleteMovie(Long id) {
         movieList.removeIf(m -> m.getId().equals(id));
-        saveMovies();  // Save updated movie list to file after deletion
-    }
-
-    private void bubbleSort(List<Movie> list, String sortBy) {
-        for (int i = 0; i < list.size(); i++) {
-            for (int j = 1; j < list.size() - i; j++) {
-                boolean shouldSwap = false;
-                Movie m1 = list.get(j - 1);
-                Movie m2 = list.get(j);
-
-                switch (sortBy.toLowerCase()) {
-                    case "title":
-                        shouldSwap = m1.getTitle().compareToIgnoreCase(m2.getTitle()) > 0;
-                        break;
-                    case "genre":
-                        shouldSwap = m1.getGenre().compareToIgnoreCase(m2.getGenre()) > 0;
-                        break;
-                    case "year":
-                        shouldSwap = m1.getYear() > m2.getYear();
-                        break;
-                    case "rating": // Add sorting by rating
-                        shouldSwap = m1.getRating() > m2.getRating();
-                        break;
-                }
-
-                if (shouldSwap) {
-                    Collections.swap(list, j - 1, j);
-                }
-            }
-        }
+        saveMovies();
     }
 }
