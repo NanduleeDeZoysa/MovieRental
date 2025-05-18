@@ -20,29 +20,48 @@ public class Movie {
     }
 
     // Getters and Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public String getTitle() { return title; }
+    public String getTitle() {
+        return title;
+    }
     public void setTitle(String title) {
+
         this.title = title != null ? title.trim() : null;
     }
 
-    public String getGenre() { return genre; }
+    public String getGenre() {
+        return genre;
+    }
     public void setGenre(String genre) {
         this.genre = genre != null ? genre.trim() : null;
     }
 
-    public int getYear() { return year; }
-    public void setYear(int year) { this.year = year; }
+    public int getYear() {
+        return year;
+    }
+    public void setYear(int year) {
+        this.year = year;
+    }
 
-    public double getRating() { return rating; }
+    public double getRating() {
+        return rating;
+    }
     public void setRating(double rating) {
+
         this.rating = Math.max(0, Math.min(10, rating)); // Ensure rating is between 0-10
     }
 
-    public String getPosterUrl() { return posterUrl; }
+    public String getPosterUrl() {
+        return posterUrl;
+    }
     public void setPosterUrl(String posterUrl) {
+
         this.posterUrl = posterUrl != null ? posterUrl.trim() : null;
     }
 
@@ -56,6 +75,7 @@ public class Movie {
 
     @Override
     public int hashCode() {
+
         return id != null ? id.hashCode() : 0;
     }
 }
