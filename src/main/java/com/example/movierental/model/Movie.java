@@ -1,5 +1,5 @@
 package com.example.movierental.model;
-
+//atribut
 public class Movie {
     private Long id;
     private String title;
@@ -8,7 +8,7 @@ public class Movie {
     private double rating;
 
     public Movie() {}
-
+//cunstructer
     public Movie(Long id, String title, String genre, int year, double rating) {
         this.id = id;
         this.title = title;
@@ -16,7 +16,7 @@ public class Movie {
         this.year = year;
         this.rating = rating;
     }
-
+//geters and seters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
