@@ -19,7 +19,7 @@ public class MovieListController {
     @GetMapping("/movieList")
     public String movieList(Model model) {
         model.addAttribute("movies", movieService.getAllMovies("rating"));
-        return "movieList";  // ✅ matches movieList.html
+        return "movieList";  // matches movieList.html
 
     }
 
