@@ -31,7 +31,7 @@ public class MovieService {
             File file = new File(filePath);
             if (file.exists()) {
                 movieList = objectMapper.readValue(file, new TypeReference<List<Movie>>() {});
-                // Ensure all movies have poster URLs
+                // all movies have poster URLs
                 movieList.forEach(movie -> {
                     if (movie.getPosterUrl() == null || movie.getPosterUrl().isEmpty()) {
                         movie.setPosterUrl(DEFAULT_POSTER_URL);
@@ -120,15 +120,7 @@ public class MovieService {
         }
     }
 
-    public synchronized void addToRecentlyWatched(Movie movie) {
-        if (movie == null) return;
 
-        recentlyWatched.remove(movie);
-        recentlyWatched.addFirst(movie);
-        if (recentlyWatched.size() > 5) {
-            recentlyWatched.removeLast();
-        }
-    }
 
     public List<Movie> getRecentlyWatched() {
         return new ArrayList<>(recentlyWatched);
