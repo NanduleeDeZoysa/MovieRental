@@ -1,6 +1,5 @@
-package com.example.movierental;
+package com.example.movierental.controller;
 
-import com.example.movierental.model.User;
 import com.example.movierental.model.UserNode;
 import com.example.movierental.services.UserServices;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,7 @@ import java.io.File;
 import java.io.IOException;
 
 @org.springframework.stereotype.Controller
-public class Controller {
+public class userManegmentController {
 
     @Autowired
     UserServices userServices;
