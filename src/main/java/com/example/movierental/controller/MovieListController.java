@@ -18,7 +18,7 @@ public class MovieListController {
 
     @GetMapping("/movieList")
     public String movieList(Model model) {
-        model.addAttribute("movies", movieService.getAllMovies("title"));
+        model.addAttribute("movies", movieService.getAllMovies("rating"));
         return "movieList";  // ✅ matches movieList.html
 
     }
@@ -29,7 +29,7 @@ public class MovieListController {
             @RequestParam(required = false, defaultValue = "title") String sortBy,
             Model model
     ) {
-        List<Movie> movies = movieService.getAllMovies(sortBy);
+        List<Movie> movies = movieService.getAllMovies("rating");
 
         // Bubble sort by rating
         if ("rating".equalsIgnoreCase(sortBy)) {
@@ -79,7 +79,6 @@ public class MovieListController {
 
     // === BUBBLE SORT BY RATING ===
     private List<Movie> bubbleSortMoviesByRating(List<Movie> movies) {
-        // Bubble Sort Algorithm
         for (int i = 0; i < movies.size(); i++) {
             for (int j = 0; j < movies.size() - 1 - i; j++) {
                 if (movies.get(j).getRating() < movies.get(j + 1).getRating()) {
