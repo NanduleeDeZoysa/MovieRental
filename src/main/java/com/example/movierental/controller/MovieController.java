@@ -16,12 +16,14 @@ public class MovieController {
 
     @GetMapping("/movies")
     public List<Movie> getMovies() {
+        //shorting
         MovieManager.sortMoviesByRating();
             return MovieManager.getMovies();
     }
-
+//add to move for move list
     @PostMapping("/watch")
     public String watchMovie(@RequestParam String title, HttpSession session) {
+        //atribute acssese
         User user = (User) session.getAttribute("loggedInUser");
         Movie movie = MovieManager.getMovieByTitle(title);
         if (user != null && movie != null) {
@@ -30,7 +32,7 @@ public class MovieController {
         }
         return "User not found or movie not found";
     }
-
+//check to list
     @GetMapping("/watchlist")
     public List<String> getRecentMovies(HttpSession session) {
         User user = (User) session.getAttribute("loggedInUser");
