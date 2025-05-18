@@ -7,7 +7,7 @@ import java.util.List;
 
 public class MovieManager {
     private static final List<Movie> movieList = new ArrayList<>();
-    private static int idCounter = 1;
+    private static long idCounter = 1;
 
     public static void addMovie(Movie movie) {
         movie.setId(idCounter++);
