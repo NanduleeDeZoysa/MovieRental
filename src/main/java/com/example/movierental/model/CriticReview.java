@@ -1,4 +1,4 @@
 package com.example.movierental.model;
 
-public class CriticReview {
+public class CriticReview extends Review {
 }
