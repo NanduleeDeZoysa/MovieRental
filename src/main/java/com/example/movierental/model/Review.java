@@ -2,23 +2,22 @@ package com.example.movierental.model;
 
 import java.time.LocalDateTime;
 
-public class MovieReview extends Review {
+public class Review {
     private String movieName;
     private String review;
     private int rating;
     private LocalDateTime timestamp;
 
-    public MovieReview() {
+    public Review() {
     }
 
-    public MovieReview(String movieName, String review, int rating) {
+    public Review(String movieName, String review, int rating) {
         this.movieName = movieName;
         this.review = review;
         this.rating = rating;
         this.timestamp = LocalDateTime.now();
     }
 
-    // Getters and Setters
     public String getMovieName() {
         return movieName;
     }
@@ -42,12 +41,4 @@ public class MovieReview extends Review {
     public void setRating(int rating) {
         this.rating = rating;
     }
-
-    public LocalDateTime getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(LocalDateTime timestamp) {
-        this.timestamp = timestamp;
-    }
-} 
+}
