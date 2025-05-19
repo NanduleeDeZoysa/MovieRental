@@ -54,7 +54,7 @@ public class Movie {
     }
     public void setRating(double rating) {
 
-        this.rating = Math.max(0, Math.min(10, rating)); // Ensure rating is between 0-10
+        this.rating = Math.max(0, Math.min(5, rating)); // Ensure rating is between 0-10
     }
 
     public String getPosterUrl() {
