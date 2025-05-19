@@ -22,7 +22,7 @@ public class MovieService {
 
     public MovieService() {
         loadMovies();
-        initializeGenreCache();
+        GenreCache();
     }
 
 
@@ -47,7 +47,7 @@ public class MovieService {
     private synchronized void saveMovies() {
         try {
             objectMapper.writerWithDefaultPrettyPrinter().writeValue(new File(filePath), movieList);
-            initializeGenreCache(); // Refresh cache after changes
+            GenreCache(); // Refresh cache after changes
         } catch (IOException e) {
             System.err.println("Error saving movies: " + e.getMessage());
             throw new RuntimeException("Failed to save movies data", e);
@@ -56,7 +56,7 @@ public class MovieService {
 
 
 
-    private void initializeGenreCache() {
+    private void GenreCache() {
         genreCache.clear();
         movieList.stream()
                 .map(Movie::getGenre)
@@ -144,8 +144,8 @@ public class MovieService {
 
         String searchQuery = query.toLowerCase();
         return movieList.stream()
-                .filter(movie -> containsIgnoreCase(movie.getTitle(), searchQuery) ||
-                        containsIgnoreCase(movie.getGenre(), searchQuery))
+                .filter(movie -> IgnoreCase(movie.getTitle(), searchQuery) ||
+                        IgnoreCase(movie.getGenre(), searchQuery))
                 .collect(Collectors.toList());
     }
 
@@ -166,7 +166,7 @@ public class MovieService {
         movies.sort(comparator);
     }
 
-    private boolean containsIgnoreCase(String source, String search) {
+    private boolean IgnoreCase(String source, String search) {
         return source != null && source.toLowerCase().contains(search);
     }
 
