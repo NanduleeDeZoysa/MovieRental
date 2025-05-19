@@ -1,238 +1,135 @@
+package com.example.movierental.controller;
 
-// 13/05/2025
-// 10.30
+import org.springframework.ui.Model;
+import com.example.movierental.model.Movie;
+import com.example.movierental.model.User;
+import com.example.movierental.services.AdminService;
+import com.example.movierental.services.UserServices;
 
-package com.example.adminbackend.controller;
-import com.example.adminbackend.model.movie;
-import com.example.adminbackend.services.Movie;
-import com.example.adminbackend.services.MovieService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Optional;
 
-import static BaseAdmin.getAdminCount;
 
-//interface for admin operation
-interface AdminOperations
-{
-    void dashboard();
-    void promoteUser();
-    void deleteUser();
+@Controller
+@RequestMapping("/admin")
+public class adminController {
+    @Autowired
+    private AdminService adminService;
+    @Autowired
+    private UserServices userServices;
+    private String User;
+
+    // Dashboard
+    @GetMapping("/admin")
+    public String admin(Model model) {
+        model.addAttribute("movieCount",adminService.getMovieCount());
+        model.addAttribute("UserCount",adminService.getUserCount());
+        model.addAttribute("reviewCount",adminService.getReviewCount());
+        model.addAttribute("totalCount",adminService.getTotalCount());
+        model.addAttribute("movies",adminService.getAllMovies(model.toString()));
+
+        return "admindashboard";
+    }
+    // movies
+
+    @GetMapping("/movies")
+    public String manageMovies(Model model) {
+        model.addAttribute("movies",adminService.getAllMovies(model.toString()));
+        return "Movies";
+    }
+    @GetMapping("/movies/add")
+    public String showAddMovieForm(Model model) {
+        model.addAttribute("movie",new Movie());
+        return "add-movie";
+    }
+    @PostMapping("/movies/add")
+    public String addMovie(@RequestBody Movie movie) {
+        adminService.addMovie(movie);
+        return "redirect:/admin/admindashboard";
+    }
+    @GetMapping("/movies/update/{id}")
+    public String showUpdateMovieForm(@PathVariable("id") int movieId, Model model) {
+        Optional<Movie> movie = adminService.getMovieById(movieId);
+        model.addAttribute("Movie",movie.orElse(new Movie()));
+        return "redirect:/admin/admindashboard";
+    }
+    @PostMapping("/movies/update")
+    public String updateMovie(@ModelAttribute Movie movie)
+    {
+        adminService.updateMovie(movie);
+        return "redirect:/admin/movies";
+    }
+    @GetMapping("/movie/delete/{id}")
+    public String deleteMovie(@PathVariable("id") int movieId)
+    {
+        adminService.deleteMovie(movieId);
+        return "redirect:/admin/admindashboard";
+    }
+
+    // user
+    @GetMapping("/users")
+    public String manageUsers(Model model)
+    {
+        model.addAttribute("Users", adminService.getUsers());
+        return "Users";
+    }
+    // promote user to admin
+    @GetMapping("/users/promote/{id}")
+    public String promoteToAdmin(@PathVariable("id") int id)
+    {
+      Optional<User> user = userServices.getfindById(User);
+      if (user.isPresent()) {
+          user.get().setUserRole("ADMIN");
+          userServices.saveUser(userServices.readUsers());
+          //userServices.saveUser(user.get());
+      }
+      else {
+          System.out.println("User not found");
+      }
+      return "redirect:/admin/users";
+    }
+    @GetMapping("/users/delete/{id}")
+    public String deleteUser(@PathVariable("id") int id)
+    {
+        adminService.deleteUser(id);
+        return "redirect:/admin/users";
+    }
+
+    // reviews
+
+    @GetMapping("/reviews")
+    public String manageReviews(Model model)
+    {
+        model.addAttribute("reviews", adminService.getReview());
+        return "Reviews";
+    }
+    @GetMapping("/reviews/delete/{id}")
+    public String deleteReview(@PathVariable("id")int id)
+    {
+        adminService.deleteReviews(id);
+        return "redirect:/admin/reviews";
+    }
 }
 
-        abstract  class BaseAdmin
-        {
-            protected String adminID;
-            protected String adminPassword;
-            protected static int adminCount = 0;
-
-            public BaseAdmin(String adminID, String adminPassword)
-            {
-                this.adminID = adminID;
-                this.adminPassword = adminPassword;
-                adminCount++;
-            }
-            public abstract void manageMovies();
-            public static int getAdminCount()
-            {
-                return adminCount;
-            }
-        }
-        // create the movie class
-        class Movies {
-            private final String MovieID;
-            private final String Title;
-            private final String Description;
-            private final int Year;
-            private String genre;
-
-
-            // constrotor
-            public Movies(String MovieID,String Title,String Description,int Year,String genre)
-            {
-                this.MovieID = MovieID;
-                this.Title = Title;
-                this.Description = Description;
-                this.Year = Year;
-                this.genre = genre;
-            }
-            // getter
-            public String getMovieID()
-            {
-                return MovieID;
-            }
-            public String geTitle()
-            {
-                return Title;
-            }
-            public String getDescription()
-            {
-                return Description;
-            }
-            public int getYear()
-            {
-                return Year;
-            }
-        }
-        class Reviews
-        {
-            private String MovieID;
-            private String Title;
-            private String genre;
-            private int  Rating;
-            private long reviewdate;
-
-            // create the constructor
-            public Reviews(String MovieID,String Title,String Description,int Year,String genre,int Rating,long reviewdate)
-            {
-                this.MovieID = MovieID;
-                this.Title = Title;
-                this.genre = genre;
-                this.Rating = Rating;
-                this.reviewdate = reviewdate;
-            }
-
-            // getters
-            public String getMovieID()
-            {
-                return MovieID;
-            }
-            public String getTitle()
-            {
-                return Title;
-            }
-            public String getgenre()
-            {
-                return genre;
-            }
-            public int getRating()
-            {
-                return Rating;
-            }
-            public long getReviewdate()
-            {
-                return reviewdate;
-            }
-
-        }
-
-        class MovieCollection {
-            private List<Movies> movies = new ArrayList<>();
-            {
-                void addMovie(Movie)
-                    {
-                            movies.add(movie);// Correct way to add the movie
-                    }
-            }
-
-        }
-        public void addMovie(movie Movie)
-        {
-            movie.setTitle(Movie);
-        }
-        public List<Movies> getMovies()
-        {
-            return movies;
-        }
-}
-        class Adminmanagement extends BaseAdmin implements AdminOperations {
-            private MovieCollection movieCollection;
-            private List<Reviews> reviews;
-
-            public Adminmanagement(String adminID, String adminPassword, MovieCollection movieCollection, List<Reviews> reviews) {
-                super(adminID, adminPassword);
-                this.movieCollection = movieCollection;
-                this.reviews = reviews;
-            }
-
-            public void dashboard() {
-                System.out.println("Admin " + adminID + " dashboard accessed. Total admins :" + getAdminCount());
-            }
-
-            @Override
-            public void manageMovies() {
-                System.out.println(adminID);
-            }
 
 
 
 
 
-            public void addMovie(movie Movie)
-            {
-                movie.setTitle(Movie);
-            }
-            public List<Movies> getMovies()
-            {
-                return movies;
-            }
-        }
 
-        class Adminmanagement extends BaseAdmin implements AdminOperations {
-            private MovieCollection movieCollection;
-            private List<Reviews> reviews;
 
-            public Adminmanagement(String adminID, String adminPassword, MovieCollection movieCollection, List<Reviews> reviews) {
-                super(adminID, adminPassword);
-                this.movieCollection = movieCollection;
-                this.reviews = reviews;
-            }
 
-            public void dashboard() {
-                System.out.println("Admin " + adminID + " dashboard accessed. Total admins :" + A.getAdminCount());
-            }
 
-            @Override
-            public void manageMovies() {
-                System.out.println(adminID);
-            }
 
-            public void manageMovieForm() {
-                System.out.println(adminID);
-            }
 
-            public void showAddMOvieForm() {
-                System.out.println(adminID);
-            }
 
-            public void updateMovie() {
-                System.out.println(adminID);
-            }
 
-            public void deleteMovie() {
-                System.out.println(adminID);
-            }
 
-            @Override
-            public void promoteUser() {
-                System.out.println(adminID);
-            }
 
-            @Override
-            public void deleteUser() {
-                System.out.println(adminID);
-            }
 
-            public void manageReviews() {
-                System.out.println(adminID);
-            }
 
-            public void deleteReview() {
-                System.out.println(adminID);
-            }
-        }
 
-        public class Main
-        {
-            public static void main(String[] args)
-            {
-                Adminmanagement admin = new Adminmanagement(ADM001);
-                admin.manageMovieForm();
-                admin.showAddMOvieForm();
-                admin.updateMovie();
-                admin.deleteMovie();
-                admin.manageReviews();
-                admin.promoteUser();
-                admin.dashboard();
-            }
-        }
+

@@ -1,86 +1,45 @@
-package com.example.adminbackend.controller;
+package com.example.movierental.controller;
 
 import com.example.movierental.model.Movie;
-import com.example.movierental.services.MovieService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import com.example.movierental.model.User;
+import util.MovieManager;
+
+import jakarta.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.ArrayList;
 import java.util.List;
 
-@Controller
-public class MovieController<Movie> {
+@RestController
+@RequestMapping("/api")
+public class MovieController {
 
-    @Autowired
-    private MovieService movieService;
-
-    // LIST MOVIES
     @GetMapping("/movies")
-    public String getAllMovies(
-            @RequestParam(required = false, defaultValue = "title") String sortBy,
-            Model model
-    ) {
-        List<Movie> movies = movieService.getAllMovies(sortBy);
+    public List<Movie> getMovies() {
+        MovieManager.sortMoviesByRating();
+            return MovieManager.getMovies();
+    }
 
-        // Bubble sort by rating
-        if ("rating".equalsIgnoreCase(sortBy)) {
-            movies = bubbleSortMoviesByRating(movies);
+    @PostMapping("/watch")
+    public String watchMovie(@RequestParam String title, HttpSession session) {
+        User user = (User) session.getAttribute("loggedInUser");
+        Movie movie = MovieManager.getMovieByTitle(title);
+        if (user != null && movie != null) {
+            user.watchMovie(movie);
+            return "Movie added to recent list!";
         }
-
-        model.addAttribute("movies", movies);
-        return "movieList";  // Matches movieList.html
+        return "User not found or movie not found";
     }
 
-    // ADD MOVIE FORM
-    @GetMapping("/movies/add")
-    public String showAddForm(Model model) {
-        model.addAttribute("movie", new Movie());
-        return "movieForm";  // This matches movieForm.html
-    }
-
-    //  HANDLE ADD MOVIE
-    @PostMapping("/movies/add")
-    public String addMovie(@ModelAttribute Movie movie) {
-        movieService.saveMovie(movie);
-        return "redirect:/movies";
-    }
-
-    // EDIT MOVIE FORM
-    @GetMapping("/movies/edit/{id}")
-    public String showEditForm(@PathVariable Long id, Model model) {
-        Movie movie = movieService.getMovieById(id).orElseThrow();
-        model.addAttribute("movie", movie);
-        return "movieEdit";  // Matches movieEdit.html
-    }
-
-    //HANDLE EDIT MOVIE
-    @PostMapping("/movies/edit/{id}")
-    public String editMovie(@PathVariable Long id, @ModelAttribute Movie movie) {
-        movie.setId(id);
-        movieService.saveMovie(movie);
-        return "redirect:/movies";
-    }
-
-    // DELETE MOVIE
-    @GetMapping("/movies/delete/{id}")
-    public String deleteMovie(@PathVariable Long id) {
-        movieService.deleteMovie(id);
-        return "redirect:/movies";
-    }
-
-    // BUBBLE SORT BY RATING
-    private List<Movie> bubbleSortMoviesByRating(List<Movie> movies) {
-        // Bubble Sort Algorithm
-        for (int i = 0; i < movies.size(); i++) {
-            for (int j = 0; j < movies.size() - 1 - i; j++) {
-                if (movies.get(j).getRating() < movies.get(j + 1).getRating()) {
-                    Collections.swap(movies, j, j + 1);
-                }
+    @GetMapping("/watchlist")
+    public List<String> getRecentMovies(HttpSession session) {
+        User user = (User) session.getAttribute("loggedInUser");
+        List<String> result = new ArrayList<>();
+        if (user != null) {
+            for (int i = user.getRecentMovies().size() - 1; i >= 0; i--) {
+                result.add(user.getRecentMovies().get(i).getTitle());
             }
         }
-        return movies;
+        return result;
     }
 }

@@ -1,4 +1,4 @@
-package com.example.adminbackend.services;
+package com.example.movierental.services;
 
 import com.example.movierental.model.Movie;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -13,7 +13,7 @@ import java.util.*;
 public class MovieService {
 
     private final String filePath = "movies.json";
-    private List<movie> movieList = new ArrayList<>();
+    private List<Movie> movieList = new ArrayList<>();
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     public MovieService() {
@@ -24,7 +24,7 @@ public class MovieService {
         try {
             File file = new File(filePath);
             if (file.exists()) {
-                movieList = objectMapper.readValue(file, new TypeReference<List<movie>>() {});
+                movieList = objectMapper.readValue(file, new TypeReference<List<Movie>>() {});
             }
         } catch (IOException e) {
             System.out.println("Error loading movies: " + e.getMessage());
@@ -37,6 +37,9 @@ public class MovieService {
         } catch (IOException e) {
             System.out.println("Error saving movies: " + e.getMessage());
         }
+    }
+    public long count() {
+        return movieList.size();
     }
 
     public List<Movie> getAllMovies(String sortBy) {

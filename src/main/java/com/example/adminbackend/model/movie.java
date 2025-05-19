@@ -1,20 +1,22 @@
-package com.example.adminbackend.model;
+package com.example.movierental.model;
 
-public class movie {
+public class Movie {
     private Long id;
     private String title;
     private String genre;
     private int year;
     private double rating;
+    private String Description;
 
-    public movie() {}
+    public Movie() {}
 
-    public movie(Long id, String title, String genre, int year, double rating) {
+    public Movie(Long id, String title, String genre, int year, double rating, String Description) {
         this.id = id;
         this.title = title;
         this.genre = genre;
         this.year = year;
         this.rating = rating;
+        this.Description = Description;
     }
 
     public Long getId() { return id; }
@@ -31,4 +33,8 @@ public class movie {
 
     public double getRating() { return rating; }
     public void setRating(double rating) { this.rating = rating; }
+
+    public String getDescription() { return Description; }
+    public void setDescription(String Description) { this.Description = Description; }
+
 }
