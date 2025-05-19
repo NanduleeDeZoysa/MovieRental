@@ -2,7 +2,7 @@ package com.example.movierental.model;
 
 import java.time.LocalDateTime;
 
-public class MovieReview {
+public class MovieReview extends Review {
     private String movieName;
     private String review;
     private int rating;
