@@ -44,10 +44,9 @@ public class MovieController {
             session.setAttribute("user", currentUser);
 
             List<Movie> topMovies = movieService.getTopMovies(5);
-            List<Movie> recentlyWatched = movieService.getRecentlyWatched();
+
 
             model.addAttribute("topMovies", topMovies);
-            model.addAttribute("recentlyWatched", recentlyWatched);
             model.addAttribute("watchlist", currentUser.getWatchlist());
             model.addAttribute("movieService", movieService);
 
@@ -317,28 +316,5 @@ public class MovieController {
         }
     }
 
-    @PostMapping("/rent/{id}")
-    public String rentMovie(
-            @PathVariable Long id,
-            HttpSession session,
-            RedirectAttributes redirectAttributes) {
-        try {
-            User user = (User) session.getAttribute("user");
-            if (user == null) {
-                redirectAttributes.addFlashAttribute("error", "Please login first");
-                return "redirect:/login";
-            }
 
-            Movie movie = movieService.getMovieById(id)
-                    .orElseThrow(() -> new IllegalArgumentException("Movie not found"));
-
-
-
-            redirectAttributes.addFlashAttribute("success", "Movie rented successfully: " + movie.getTitle());
-            return "redirect:/movies/view/" + id;
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Error renting movie: " + e.getMessage());
-            return "redirect:/movies/view/" + id;
-        }
-    }
 }

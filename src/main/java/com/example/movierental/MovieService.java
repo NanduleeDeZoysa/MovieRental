@@ -122,20 +122,9 @@ public class MovieService {
 
 
 
-    public List<Movie> getRecentlyWatched() {
-        return new ArrayList<>(recentlyWatched);
-    }
 
-    public List<Movie> getSimilarMovies(String genre, Long excludeId) {
-        if (genre == null || genre.trim().isEmpty()) {
-            return Collections.emptyList();
-        }
 
-        return genreCache.getOrDefault(genre, Collections.emptyList()).stream()
-                .filter(m -> !m.getId().equals(excludeId))
-                .limit(4)
-                .collect(Collectors.toList());
-    }
+
 
     public List<Movie> searchMovies(String query) {
         if (query == null || query.trim().isEmpty()) {
