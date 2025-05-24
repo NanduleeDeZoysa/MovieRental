@@ -6,11 +6,11 @@ import com.example.movierental.model.UserNode;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
-//import java.util.LinkedList;
 
 @Service
 public class UserServices {
 
+    //Save User Method
     public void saveUser(UserList list) {
         String filePath = "users.txt";  // Path to your file
 
@@ -30,6 +30,7 @@ public class UserServices {
         }
     }
 
+    //ReadUsers Method
     public UserList readUsers() {
         String filePath = "users.txt";
         // LinkedList to store users
@@ -43,8 +44,8 @@ public class UserServices {
                 // Assuming file format is "Name:Email:Password"
                 String[] userDetails = line.split(":");
                 // Create a User object and add it to the LinkedList
-                if(userDetails.length==4) {
-                    UserNode user = new UserNode(userDetails[0], userDetails[1], userDetails[2], userDetails[3]);
+                if(userDetails.length==5) {
+                    UserNode user = new UserNode(userDetails[0], userDetails[1], userDetails[2], userDetails[3],userDetails[4]);
                     usersList.insertFirst(user);
                 }
             }
@@ -58,6 +59,7 @@ public class UserServices {
         return usersList;
     }
 
+    //Add User Method
     public Boolean Adduser(UserNode user) {
        UserList usersList = this.readUsers();
        if(usersList.find(user.getName())==null) {
@@ -68,6 +70,7 @@ public class UserServices {
        return false;
     }
 
+    //Login User Method
     public Boolean LoginUser(String name, String password) {
         UserList usersList = this.readUsers();
         UserNode user=usersList.find(name);
@@ -77,6 +80,7 @@ public class UserServices {
         return false;
     }
 
+    //getUserName Method
     public String getUserName(String name) {
         UserList usersList = this.readUsers();
         UserNode user=usersList.find(name);
@@ -86,6 +90,7 @@ public class UserServices {
             return "Not Found";
     }
 
+    //getEmail Method
     public String getEmail(String name) {
         UserList usersList = this.readUsers();
         UserNode user=usersList.find(name);
@@ -95,6 +100,7 @@ public class UserServices {
         return "Not Found";
     }
 
+    //getNumber Method
     public String getNumber(String name) {
         UserList usersList = this.readUsers();
         UserNode user=usersList.find(name);
@@ -104,6 +110,17 @@ public class UserServices {
         return "Not Found";
     }
 
+    //getUserName Method
+    public String getRole(String name) {
+        UserList usersList = this.readUsers();
+        UserNode user=usersList.find(name);
+        if(user.getName().equals(name)){
+            return user.getRole();
+        }
+        return "Not Found";
+    }
+
+    //updateUser Method
     public Boolean updateUser(String name,UserNode user) {
         UserList usersList = this.readUsers();
         if(usersList.delete(name)) {

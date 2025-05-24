@@ -15,7 +15,7 @@ public class UserList {
 
     //InsertFirst Method
     public void insertFirst(UserNode node) {
-        UserNode newNode=new UserNode(node.getName(),node.getEmail(),node.getNumber(),node.getPassword());
+        UserNode newNode=new UserNode(node.getName(),node.getEmail(),node.getNumber(),node.getRole(),node.getPassword());
         newNode.next = this.first;
         first=newNode;
     }
@@ -25,7 +25,7 @@ public class UserList {
        UserNode  current = first;
         while (current != null) {
             if (current.name.equals(name)) {
-                UserNode newNode = new UserNode(node.getName(),node.getEmail(),node.getNumber(),node.getPassword());
+                UserNode newNode = new UserNode(node.getName(),node.getEmail(),node.getNumber(), node.getRole(), node.getPassword());
                 newNode.next = current.next;
                 current.next = newNode;
                 break;
@@ -60,21 +60,19 @@ public class UserList {
         UserNode current = first;
         UserNode previous = first;
 
-        while (!current.name.equals(name)) {
-            if (current.next == null) {
-                return false;
-            } else {
-                previous = current;
-                current = current.next;
-                break;
+        while (current != null) {
+            if (current.name.equals(name)) {
+                if (current == first) {
+                    first = first.next;
+                } else {
+                    previous.next = current.next;
+                }
+                return true;
             }
+            previous = current;
+            current = current.next;
         }
-        if (current == first) {
-            first = first.next;
-        } else {
-            previous.next = current.next;
-        }
-        return true;
+        return false;
     }
 
     //Display Method

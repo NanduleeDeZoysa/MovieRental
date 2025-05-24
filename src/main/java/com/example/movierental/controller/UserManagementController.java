@@ -1,9 +1,8 @@
-package com.example.movierental;
+package com.example.movierental.controller;
 
-import com.example.movierental.model.User;
+import com.example.movierental.model.AdminNode;
 import com.example.movierental.model.UserNode;
 import com.example.movierental.services.UserServices;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,15 +14,13 @@ import java.io.File;
 import java.io.IOException;
 
 @org.springframework.stereotype.Controller
-public class Controller {
+public class UserManagementController {
 
-    @Autowired
-    UserServices userServices;
+    UserServices userServices = new UserServices();
     private static final String UPLOAD_DIR = "uploads/";
 
     @GetMapping("/")
-    public String index(Model model) {
-        model.addAttribute("message", "Hello World");
+    public String index() {
         return "login";
     }
 
@@ -35,6 +32,11 @@ public class Controller {
     @GetMapping("/registration")
     public String registration() {
         return "registration";
+    }
+
+    @GetMapping("/watch")
+    public String watch() {
+        return "watch";
     }
 
     @GetMapping("/profile")
@@ -75,17 +77,36 @@ public class Controller {
         return "profile";
     }
 
+    @GetMapping("/adminProfile")
+    public String adminProfile(@RequestParam String username, Model model) {
+        model.addAttribute("username", username);
+        String name = userServices.getUserName(username);
+        model.addAttribute("name", name);
+        String email = userServices.getEmail(username);
+        model.addAttribute("email", email);
+        String number = userServices.getNumber(username);
+        model.addAttribute("number", number);
+
+        return "adminProfile";
+
+    }
+
+
     @PostMapping("/registration")
     //@ResponseBody
     public String registration(Model model,
-                               @RequestParam String name, @RequestParam String email, @RequestParam String number, @RequestParam String password, @RequestParam String repeatPassword) {
+                               @RequestParam String name, @RequestParam String email, @RequestParam String number, @RequestParam String role, @RequestParam String password, @RequestParam String repeatPassword ) {
+        //Password Match Check
         if (!password.equals(repeatPassword)) {
             model.addAttribute("message2", "Passwords do not match");
-           return "registration";
-       }
-        UserNode u1 = new UserNode(name, email, number, password);
-        if(userServices.Adduser(u1))
-            return "login";
+            return "registration";
+        }
+
+        //Create a new user
+         UserNode u1 = new UserNode(name, email, number, role, password);
+        //Save that user
+        if (userServices.Adduser(u1))
+                return "login";
         else {
             model.addAttribute("message1", "User already exists");
             return "registration";
@@ -93,14 +114,23 @@ public class Controller {
     }
 
     @PostMapping("/login")
-    public String login(Model model, @RequestParam String name, @RequestParam String password) {
-        if (userServices.LoginUser(name, password))
-            return "redirect:/profile?username=" + name;
+    public String login(Model model,
+                        @RequestParam String name,
+                        @RequestParam String password
+                        ) {
+        if (userServices.LoginUser(name, password)) {
+            if(userServices.getRole(name).equals("Admin")){
+                return "redirect:/adminProfile?username="+name;
+            } else{
+                return "redirect:/profile?username="+name;
+            }
+        }
         else {
-            model.addAttribute("message3", "Invalid username or password");
+            model.addAttribute("message3", "Invalid user credentials");
             return "login";
         }
     }
+
 
     @GetMapping("/EditProfile")
     public String editProfile(@RequestParam String username, Model model) {
@@ -110,12 +140,15 @@ public class Controller {
 
     @PostMapping("/saveprofile")
     public String saveProfile(Model model, @RequestParam String username , @RequestParam String email,
-                              @RequestParam String number, @RequestParam String oldPassword ,
+                              @RequestParam String number, @RequestParam String role, @RequestParam String oldPassword ,
                               @RequestParam String newPassword , @RequestParam String repeatPassword) {
 
+        //Check the old password is correct
         if (userServices.LoginUser(username, oldPassword)) {
+            //Check the new password and repeat password is matching
             if (newPassword.equals(repeatPassword)) {
-                UserNode u1 = new UserNode(username, email, number, newPassword);
+                UserNode u1 = new UserNode(username, email, number, role, newPassword);
+                //Update the user
                 if(userServices.updateUser(username,u1)){
                     return "login";
                 }else{

@@ -1,3 +1,3 @@
-User03:user03@gmail.com:0778965342:abc12
-User01:user_01@gmail.com:0712345678:123456
-User02:user02@gmail.com:0762345672:1q2w
+Admin1:user01@gmail.com:132324667:Admin:123
+User01:abc@gmail.com:122435465:User:123
+User02:abcd@gmail.com:124353:User:123
