@@ -1,61 +1,59 @@
-📌 Project Overview
+# 🎬 Movie Rental System
 
-The Movie Rental System is a web-based application that allows users to browse movies, rent them, and leave reviews. Admin users can manage movie listings, while users can explore and interact with the system.
+A Movie Rental and Review Platform developed as part of an academic project.  
+The system allows users to browse, rent, and review movies while admins manage the movie catalog.
 
-This project demonstrates the use of:
+---
 
-Linked Lists (for movie management)
-Stacks (for recently watched movies)
-Bubble Sort (for sorting movies by rating)
-Role-based authentication (Admin/User)
-🚀 Features
-👤 User Features
-Register and login system
-Browse available movies
-Rent movies
-View recently watched movies (Stack-based)
-Leave and view reviews
-View movie ratings
-🛠 Admin Features
-Add new movies
-Update movie details
-Delete movies
-Manage movie catalog
-🧠 Data Structures Used
-Linked List → Used to dynamically store and manage movie records
-Stack → Stores recently watched movies for quick access
-Bubble Sort → Sorts movies based on rating
-🔐 User Roles
-Admin → Full control over movie database
-User → Can browse, rent, and review movies
-🏗️ Tech Stack
-Frontend: HTML, CSS, JavaScript (if applicable)
-Backend: Java / PHP (based on implementation)
-Version Control: Git & GitHub
-📂 Project Structure (Example)
-MovieRental/
-│── src/
-│   ├── controllers/
-│   ├── models/
-│   ├── views/
-│── database/
-│── assets/
-│── README.md
-⚙️ How to Run
-Clone the repository:
-git clone https://github.com/NanduleeDeZoysa/MovieRental.git
-Open the project in your IDE (Eclipse / VS Code / IntelliJ)
-Configure database (if applicable)
-Run the application
-📊 Learning Outcomes
-Understanding of core data structures in real applications
-Implementation of CRUD operations
-Role-based system design
-Basic software architecture for web applications
-📌 Future Improvements
-Add online payment system for rentals
-Improve UI/UX design
-Add recommendation system
-Improve sorting using more efficient algorithms (Quick Sort / Merge Sort)
-Add movie search and filter system
-Connect with a databse
+## 📌 Project Overview
+
+The Movie Rental System is designed to simulate a basic online movie rental platform.  
+It demonstrates the use of core data structures such as Linked Lists, Stacks, and sorting algorithms to manage movie data efficiently.
+
+---
+
+## 🚀 Features
+
+### 👤 User Features
+- User registration and login
+- Browse available movies
+- Rent movies
+- View recently watched movies
+- Add and view movie reviews and ratings
+
+### 🛠 Admin Features
+- Add new movies to the system
+- Update existing movie details
+- Delete movies from the system
+- Manage overall movie database
+
+---
+
+## 🧠 Data Structures Used
+
+- **Linked List** → Used to store and manage movie records dynamically
+- **Stack** → Used to track recently watched movies
+- **Bubble Sort** → Used to sort movies based on ratings
+
+---
+
+## 🔐 User Roles
+
+### Admin
+- Full access to manage movies (Add, Update, Delete)
+
+### User
+- Can browse, rent, and review movies
+
+---
+
+## 🛠 Tech Stack
+
+- Frontend: HTML, CSS, JavaScript
+- Backend: Java / PHP (based on implementation)
+- Database: MySQL (if applicable)
+- Version Control: Git & GitHub
+
+---
+
+## 📂 Project Structure
