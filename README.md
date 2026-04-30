@@ -57,3 +57,20 @@ It demonstrates the use of core data structures such as Linked Lists, Stacks, an
 ---
 
 ## 📂 Project Structure
+MovieRental/
+│
+├── src/
+│ ├── controllers/
+│ ├── models/
+│ ├── views/
+│
+├── database/
+├── assets/
+├── README.md
+
+---
+## ⚙️ How to Run the Project
+
+1. Clone the repository:
+```bash
+git clone https://github.com/NanduleeDeZoysa/MovieRental.git
