@@ -60,9 +60,9 @@ It demonstrates the use of core data structures such as Linked Lists, Stacks, an
 MovieRental/
 │
 ├── src/
-│ ├── controllers/
-│ ├── models/
-│ ├── views/
+│   ├── controllers/
+│   ├── models/
+│   ├── views/
 │
 ├── database/
 ├── assets/
